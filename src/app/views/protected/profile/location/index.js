@@ -5,15 +5,13 @@ import { GoogleMap, Marker } from "react-google-maps";
 import { LocationMap, } from './locationmap'
 import _ from 'lodash'
 
+const DEFAULT_LOCATION = { lat: -25.363882, lng: 131.044922 }
 
 class Location extends PureComponent {
 
   constructor(props) {
     super(props)
     this._geocode = _.debounce(this._handleGeocodeAddress, 500)
-    this.state = {
-      markers: props.locationGeometry ? [props.locationGeometry] : []
-    }
   }
 
   _handleGeocodeAddress = (location) => {
@@ -24,8 +22,7 @@ class Location extends PureComponent {
           lat: result.geometry.location.lat(),
           lng: result.geometry.location.lng(),
         }
-        console.log('newGeometry', newGeometry)
-        this._mapComponent.panTo(this.state.newGeometry)
+        this._mapComponent.panTo(newGeometry)
         this.props.onLocationGeometryChanged(newGeometry)
       })
       .catch(error => console.error(error))
@@ -45,7 +42,9 @@ class Location extends PureComponent {
   }
 
   render() {
-    const markers = this.props.locationGeometry ? [this.props.locationGeometry] : []
+    const markers = this.props.locationGeometry ? [{
+      position: this.props.locationGeometry
+    }] : []
     return (
       <section>
         <ControlLabel>Your Location</ControlLabel>
@@ -56,7 +55,7 @@ class Location extends PureComponent {
           }}
         />
         <LocationMap
-          center={this.props.locationGeometry}
+          center={DEFAULT_LOCATION}
           containerElement={
             <div style={{ zIndex: -1, height: `500px`, width: '100%', }} />
           }
