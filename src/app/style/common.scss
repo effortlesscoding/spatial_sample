@@ -14,3 +14,7 @@
   @include fade-in(0s, 0.7s, ease-in);
    z-index: 9999;
  }
+
+#PlacesAutocomplete_autocomplete-container {
+  z-index: 99;
+}
