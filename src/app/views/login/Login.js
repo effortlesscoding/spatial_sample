@@ -151,21 +151,6 @@ class Login extends PureComponent {
             </form>
           </Col>
         </Row>
-        <Row>
-          <Col
-            md={4}
-            mdOffset={4}
-            xs={10}
-            xsOffset={1}            
-          >
-            <Button
-              bsStyle="primary"
-              onClick={this.goHome}
-            >
-              back to home
-            </Button>
-          </Col>
-        </Row>
       </div>
     );
   }
@@ -214,7 +199,7 @@ class Login extends PureComponent {
       auth.setToken(token);
       auth.setUserInfo(user);
 
-      history.push({ pathname: '/' }); // back to Home
+      history.push({ pathname: '/profile' }); // back to Home
     } catch (error) {
       /* eslint-disable no-console */
       console.log('login went wrong..., error: ', error);
