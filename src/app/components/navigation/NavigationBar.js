@@ -3,13 +3,10 @@
 import React              from 'react';
 import PropTypes          from 'prop-types';
 import Humburger          from './humburger/Humburger';
-import LeftNav            from './leftNav/LeftNav';
 import RightNav           from './rightNav/RightNav';
 
 const NavigationBar = ({
   brand,
-  navModel,
-  handleLeftNavItemClick,
   handleRightNavItemClick
 }) => {
   return (
@@ -26,18 +23,9 @@ const NavigationBar = ({
         <div
           className="collapse navbar-collapse"
           id="bs-example-navbar-collapse-1">
-          <ul className="nav navbar-nav">
-            {
-              <LeftNav
-                leftLinks={navModel.leftLinks}
-                onLeftNavButtonClick={handleLeftNavItemClick}
-              />
-            }
-          </ul>
           <ul className="nav navbar-nav navbar-right">
             {
               <RightNav
-                rightLinks={navModel.rightLinks}
                 onRightNavButtonClick={handleRightNavItemClick}
               />
             }
@@ -50,22 +38,7 @@ const NavigationBar = ({
 
 NavigationBar.propTypes = {
   brand:                    PropTypes.string,
-  handleLeftNavItemClick:   PropTypes.func,
-  handleRightNavItemClick:  PropTypes.func,
-  navModel:                 PropTypes.shape({
-    leftLinks:  PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string.isRequired,
-        link : PropTypes.string.isRequired
-      })
-    ).isRequired,
-    rightLinks:  PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string.isRequired,
-        link : PropTypes.string.isRequired
-      })
-    ).isRequired
-  })
+  handleRightNavItemClick:  PropTypes.func
 };
 
 NavigationBar.defaultProps  = {

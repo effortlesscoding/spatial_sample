@@ -2,41 +2,30 @@
 
 import React              from 'react';
 import PropTypes          from 'prop-types';
-import RightNavButton     from './rightNavButton/RightNavButton';
+import { Button }         from 'react-bootstrap';
 
 const RightNav = ({
-  rightLinks,
   onRightNavButtonClick
 }) => {
+
+  const _handleLogout = (e) => {
+    console.log('Log out!')
+  }
+  
   return (
     <ul className="nav navbar-nav navbar-right">
-      {
-        rightLinks.map(
-          (aLinkBtn, index) => {
-            return (
-              <RightNavButton
-                key={index}
-                link={aLinkBtn.link}
-                label={aLinkBtn.label}
-                viewName={aLinkBtn.view}
-                onClick={onRightNavButtonClick}
-              />
-            );
-          }
-        )
-      }
+      <li>
+        <Button
+          onClick={_handleLogout}
+        >
+          Log Out
+        </Button>
+      </li>
     </ul>
   );
 };
 
 RightNav.propTypes = {
-  rightLinks: PropTypes.arrayOf(
-    PropTypes.shape({
-      link: PropTypes.string,
-      label: PropTypes.string,
-      viewName: PropTypes.string
-    })
-  ),
   onRightNavButtonClick: PropTypes.func
 };
 
