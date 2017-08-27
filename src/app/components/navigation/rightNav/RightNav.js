@@ -27,7 +27,6 @@ const RightNavElement = (props) => {
 };
 
 RightNavElement.propTypes = {
-  onRightNavButtonClick: PropTypes.func
 };
 
 const mapStateToProps = (state, props) => {

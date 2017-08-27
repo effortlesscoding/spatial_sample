@@ -27,14 +27,12 @@ const isExpired = () => {
 
 const NavigationBar = ({
   brand,
-  handleRightNavItemClick
 }) => {
 
   const renderRightButton = () => {
     if (!isExpired() && isAuthenticated()) {
       return (
         <RightNav
-          onRightNavButtonClick={handleRightNavItemClick}
         />
       )
     } else {
