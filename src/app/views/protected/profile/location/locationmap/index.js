@@ -11,6 +11,7 @@ const LocationMap = withGoogleMap(props => (
     {props.markers.map((marker, index) => (
       <Marker
         {...marker}
+        key={index}
         onRightClick={() => props.onMarkerRightClick(index)}
       />
     ))}

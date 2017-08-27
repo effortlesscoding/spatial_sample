@@ -1,18 +1,16 @@
 // @flow weak
 
-import React              from 'react';
-import PropTypes          from 'prop-types';
-import { Button }         from 'react-bootstrap';
-import auth               from '../../../services/auth';
+import React               from 'react';
+import PropTypes           from 'prop-types';
+import { Button }          from 'react-bootstrap';
+import { connect }            from 'react-redux';
+import { disconnectUser, } from '../../../redux/modules/userAuth';
+import auth                from '../../../services/auth';
 
-const RightNav = ({
-  onRightNavButtonClick
-}) => {
+const RightNavElement = (props) => {
 
   const _handleLogout = (e) => {
-    console.log('Log out!')
-    auth.clearToken()
-    location.reload();
+    props.dispatchDisconnectUser()
   }
   
   return (
@@ -28,8 +26,23 @@ const RightNav = ({
   );
 };
 
-RightNav.propTypes = {
+RightNavElement.propTypes = {
   onRightNavButtonClick: PropTypes.func
 };
+
+const mapStateToProps = (state, props) => {
+  return props
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchDisconnectUser: () => {
+      dispatch(disconnectUser())
+      location.reload()
+    }
+  }
+}
+
+const RightNav = connect(mapStateToProps, mapDispatchToProps)(RightNavElement)
 
 export default RightNav;

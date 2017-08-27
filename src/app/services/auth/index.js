@@ -232,6 +232,8 @@ export const auth = {
     toStorage: Storage = APP_PERSIST_STORES_TYPES[0],
     userInfoKey: UserInfoKey = USER_INFO
   ): any {
+    console.log('setUserInfo', value)
+    console.log('setUserInfo', userInfoKey)
     if (!value || value.length <= 0) {
       return;
     }

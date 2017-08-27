@@ -21,6 +21,21 @@ const CHECK_IF_USER_IS_AUTHENTICATED = 'CHECK_IF_USER_IS_AUTHENTICATED';
 
 const DISCONNECT_USER                = 'DISCONNECT_USER';
 
+const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE';
+
+const getUserFromPersistentStore = () => {
+  let user = auth.getUserInfo()
+  try {
+    user.locationGeometry = {
+      lat: parseFloat(user.locationGeometry.lat),
+      lng: parseFloat(user.locationGeometry.lng),
+    } 
+  } catch(e) {
+
+  }
+  return user
+}
+
 // --------------------------------
 // REDUCER
 // --------------------------------
@@ -33,21 +48,32 @@ const initialState = {
   // userInfos
   id:              '',
   login:           '',
-  firstname:       '',
-  lastname:        '',
+  firstName:       '',
+  lastName:        '',
 
   token:           null,
-  isAuthenticated: false   // authentication status (token based auth)
+  isAuthenticated: false,   // authentication status (token based auth)
+  user: getUserFromPersistentStore(),
 };
+
+const updateUserProfileReducer = (state, action) => {
+  console.log('newUserProfile')
+  return {
+    ...state,
+    user: { ...action.payload, },
+  }
+}
 
 export default function (
   state = initialState,
   action
 ) {
   const currentTime = moment().format();
-
+  console.log('initialState', initialState)
   switch (action.type) {
 
+  case UPDATE_USER_PROFILE:
+    return updateUserProfileReducer(state, action)
   case CHECK_IF_USER_IS_AUTHENTICATED:
     return {
       ...state,
@@ -55,9 +81,9 @@ export default function (
       isAuthenticated: action.isAuthenticated,
       token:           action.token || initialState.token,
       id:              action.user && action.user.id         ? action.user.id:        initialState.id,
-      login:           action.user && action.user.login      ? action.user.login:     initialState.login,
-      firstname:       action.user && action.user.firstname  ? action.user.firstname: initialState.firstname,
-      lastname:        action.user && action.user.lastname   ? action.user.lastname:  initialState.firstname
+      email:           action.user && action.user.email      ? action.user.email:     initialState.email,
+      firstName:       action.user && action.user.firstName  ? action.user.firstName: initialState.firstName,
+      lastName:        action.user && action.user.lastName   ? action.user.lastName:  initialState.firstName
     };
 
   case DISCONNECT_USER:
@@ -67,9 +93,9 @@ export default function (
       isAuthenticated: false,
       token:           initialState.token,
       id:              initialState.id,
-      login:           initialState.login,
-      firstname:       initialState.firstname,
-      lastname:        initialState.lastname
+      email:           initialState.email,
+      firstName:       initialState.firstName,
+      lastName:        initialState.lastName
     };
 
   // user login (get token and userInfo)
@@ -81,18 +107,16 @@ export default function (
     };
 
   case RECEIVED_LOG_USER:
-    const userLogged = action.payload.data;
+    const user = action.payload.data;
 
     return {
       ...state,
       actionTime:      currentTime,
       isAuthenticated: true,
-      token:           userLogged.token,
-      id:              userLogged.id,
-      login:           userLogged.login,
-      firstname:       userLogged.firstname,
-      lastname:        userLogged.lastname,
-      isLogging:       false
+      token:           user.token,
+      id:              user.id,
+      isLogging:       false,
+      user: user.user,
     };
 
   case ERROR_LOG_USER:
@@ -119,9 +143,7 @@ export default function (
       actionTime: currentTime,
       isFetching: false,
       id:         userInfos.id,
-      login:      userInfos.login,
-      firstname:  userInfos.firstname,
-      lastname:   userInfos.lastname
+      ...userLogged,
     };
 
   case ERROR_USER_INFOS_DATA:
@@ -141,6 +163,15 @@ export default function (
 // --------------------------------
 //
 
+
+export function updateUserProfile(data) {
+  auth.setUserInfo(data)
+  return {
+    type: UPDATE_USER_PROFILE,
+    payload: data,
+  }
+}
+
 /**
  *
  * set user isAuthenticated to false and clear all app localstorage:
@@ -150,7 +181,11 @@ export default function (
  */
 export function disconnectUser() {
   auth.clearAllAppStorage();
-  return { type: DISCONNECT_USER };
+  return async (dispatch) => {
+    dispatch({
+      type: DISCONNECT_USER,
+    })
+  }
 }
 
 /**

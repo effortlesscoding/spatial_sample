@@ -5,46 +5,35 @@ import { GoogleMap, Marker } from "react-google-maps";
 import { LocationMap, } from './locationmap'
 import _ from 'lodash'
 
+
 class Location extends PureComponent {
-  state = {
-    location: '',
-    center: { lat: -25.363882, lng: 131.044922 },
-    markers: []
-  }
 
   constructor(props) {
     super(props)
     this._geocode = _.debounce(this._handleGeocodeAddress, 500)
+    this.state = {
+      markers: props.locationGeometry ? [props.locationGeometry] : []
+    }
   }
 
-  _handleGeocodeAddress = () => {
-    const address = this.state.location
-    geocodeByAddress(this.state.location)
+  _handleGeocodeAddress = (location) => {
+    geocodeByAddress(location)
       .then(results => {
         const result = _.first(results)
-        this.setState({
-          center: {
-            lat: result.geometry.location.lat(),
-            lng: result.geometry.location.lng(),
-          },
-          markers: [
-            {
-              position: {
-                lat: result.geometry.location.lat(),
-                lng: result.geometry.location.lng(),
-              },
-            }
-          ],
-        })
-        this._mapComponent.panTo(this.state.center)
+        const newGeometry = {
+          lat: result.geometry.location.lat(),
+          lng: result.geometry.location.lng(),
+        }
+        console.log('newGeometry', newGeometry)
+        this._mapComponent.panTo(this.state.newGeometry)
+        this.props.onLocationGeometryChanged(newGeometry)
       })
       .catch(error => console.error(error))
   }
 
   _handleLocationChange = (location) => {
-    console.log('location', location)
-    this.setState({ location, })
-    this._geocode()
+    this.props.onLocationAddressChanged(location)
+    this._geocode(location)
   }
 
   _handleMapClick = () => {
@@ -56,18 +45,18 @@ class Location extends PureComponent {
   }
 
   render() {
-    console.log('new this.state.center', this.state.center)
+    const markers = this.props.locationGeometry ? [this.props.locationGeometry] : []
     return (
       <section>
         <ControlLabel>Your Location</ControlLabel>
         <PlacesAutocomplete
           inputProps={{
-            value: this.state.location,
+            value: this.props.locationAddress,
             onChange: this._handleLocationChange,
           }}
         />
         <LocationMap
-          center={this.state.center}
+          center={this.props.locationGeometry}
           containerElement={
             <div style={{ zIndex: -1, height: `500px`, width: '100%', }} />
           }
@@ -76,7 +65,7 @@ class Location extends PureComponent {
           }
           onMapLoad={this._handleMapLoad}
           onMapClick={_.noop}
-          markers={this.state.markers}
+          markers={markers}
           onMarkerRightClick={_.noop}
         />
       </section>
