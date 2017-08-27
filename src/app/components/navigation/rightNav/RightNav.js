@@ -3,6 +3,7 @@
 import React              from 'react';
 import PropTypes          from 'prop-types';
 import { Button }         from 'react-bootstrap';
+import auth               from '../../../services/auth';
 
 const RightNav = ({
   onRightNavButtonClick
@@ -10,6 +11,8 @@ const RightNav = ({
 
   const _handleLogout = (e) => {
     console.log('Log out!')
+    auth.clearToken()
+    location.reload();
   }
   
   return (
