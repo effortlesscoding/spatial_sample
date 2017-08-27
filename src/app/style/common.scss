@@ -15,6 +15,14 @@
    z-index: 9999;
  }
 
-#PlacesAutocomplete_autocomplete-container {
-  z-index: 99;
+.react-datepicker-wrapper,
+.react-datepicker__input-container,
+.react-datepicker__input-container > input {
+  width: 100%;
+}
+
+.react-datepicker__input-container > input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 12px;
 }

@@ -33,13 +33,9 @@ const NavigationBar = ({
   const renderRightButton = () => {
     if (!isExpired() && isAuthenticated()) {
       return (
-        <ul className="nav navbar-nav navbar-right">
-          {
-            <RightNav
-              onRightNavButtonClick={handleRightNavItemClick}
-            />
-          }
-        </ul>
+        <RightNav
+          onRightNavButtonClick={handleRightNavItemClick}
+        />
       )
     } else {
       return null
