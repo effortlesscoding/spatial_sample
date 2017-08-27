@@ -42,8 +42,9 @@ class Location extends PureComponent {
   }
 
   render() {
-    const markers = this.props.locationGeometry ? [{
-      position: this.props.locationGeometry
+    const { locationGeometry, } = this.props
+    const markers = locationGeometry ? [{
+      position: locationGeometry
     }] : []
     return (
       <section>
@@ -55,7 +56,7 @@ class Location extends PureComponent {
           }}
         />
         <LocationMap
-          center={DEFAULT_LOCATION}
+          center={locationGeometry}
           containerElement={
             <div style={{ zIndex: -1, height: `500px`, width: '100%', }} />
           }

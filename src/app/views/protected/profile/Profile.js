@@ -22,7 +22,12 @@ class ProfileComponent extends PureComponent {
 
   constructor(props) {
     super(props)
-    this.state = { ...props, }
+    let dobDate = this.props.dobDate
+    if (!dobDate)
+      dobDate = moment()
+    else
+      dobDate = moment(dobDate)
+    this.state = { ...props, dobDate, }
   }
 
   _handleSaveProfile = () => {
@@ -30,18 +35,19 @@ class ProfileComponent extends PureComponent {
       firstName,
       lastName,
       locationAddress,
-      locationGeometryLat,
-      locationGeometryLng,
+      locationGeometry,
       isAdmin,
       id,
       email,
     } = this.state
+    let dobDate = this.state.dobDate
+    if (dobDate) dobDate = dobDate.format()
     this.props.dispatchSaveProfile({
+      dobDate,
       firstName,
       lastName,
       locationAddress,
-      locationGeometryLat,
-      locationGeometryLng,
+      locationGeometry,
       isAdmin,
       id,
       email,
@@ -78,12 +84,9 @@ class ProfileComponent extends PureComponent {
       lastName,
       email,
       locationAddress,
+      dobDate,
     } = this.state
-    let dobDate = this.state.dobDate
     let locationGeometry = this.state.locationGeometry
-    console.log('locationAddress', locationAddress)
-    console.log('locationGeometry', locationGeometry)
-    if (!dobDate) dobDate = moment()
     if (!locationGeometry) locationGeometry = DEFAULT_LOCATION
     return (
       <AnimatedView>
@@ -113,7 +116,10 @@ class ProfileComponent extends PureComponent {
               onLocationAddressChanged={this._handleLocationAddressChanged}
               onLocationGeometryChanged={this._handleLocationGeometryChanged}
             />
+            <br/>
             <Button
+              block
+              bsStyle="success"
               onClick={this._handleSaveProfile}
             >
               Save Profile
@@ -134,7 +140,6 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchSaveProfile: (profile) => {
-      console.log('Yes?', profile)
       dispatch(updateUserProfile(profile))
     }
   }

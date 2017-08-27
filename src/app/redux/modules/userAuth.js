@@ -2,10 +2,24 @@
 
 import moment             from 'moment';
 import { appConfig }      from '../../config';
-import userInfosMockData  from '../../mock/userInfosMock.json';
 import getLocationOrigin  from '../../services/utils/getLocationOrigin';
 import auth               from '../../services/auth';
 
+const userInfosMockData = {
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZW1vIiwiaWF0IjoxNTAyMzA3MzU0LCJleHAiOjE3MjMyMzIxNTQsImF1ZCI6ImRlbW8tZGVtbyIsInN1YiI6ImRlbW8iLCJHaXZlbk5hbWUiOiJKb2huIiwiU3VybmFtZSI6IkRvZSIsIkVtYWlsIjoiam9obi5kb2VAZXhhbXBsZS5jb20iLCJSb2xlIjpbIlN1cGVyIGNvb2wgZGV2IiwibWFnaWMgbWFrZXIiXX0.6FjgLCypaqmRp4tDjg_idVKIzQw16e-z_rjA3R94IqQ",
+  "user": {
+    "id": 111,
+    "email": "john.doe@fake.mail",
+    "firstName": "John",
+    "lastName": "Doe",
+    "locationAddress": "7 Katherine Place",
+    "locationGeometry": {
+      lat: -37,
+      lng: 141,
+    },
+    "isAdmin": true,
+  }
+}
 // --------------------------------
 // CONSTANTS
 // --------------------------------
